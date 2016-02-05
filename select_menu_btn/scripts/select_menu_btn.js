@@ -51,6 +51,7 @@ var selectMenuBtn = (function() {
         this.button.addEventListener("click", this.btnClickHandler.bind(this), false);
         document.addEventListener("click", this.docClickHanlder.bind(this), false);
         this.menu.addEventListener("change", this.radioChangeHandler.bind(this), false);
+        // using mouseenter event could be painful since it's not bubbled
         for (var i = 0; i < this.labelArr.length; i++) {
           this.labelArr[i].addEventListener("mouseenter", this.mouseEnterHandler.bind(this), false);
         }
@@ -121,14 +122,17 @@ var selectMenuBtn = (function() {
     hideMenu: function() {
       this.menu.style.cssText = "";
       this.displayState = false;
-      var labelArr = this.labelArr;
-      for (var i = 0; i < labelArr.length; i++) {
-        labelArr[i].classList.remove("active");
-      }
+      this.removeActiveClass();
     },
     showMenu: function() {
       this.menu.style.cssText = "visibility: visible;";
       this.displayState = true;
+    },
+    removeActiveClass: function() {
+      var labelArr = this.labelArr;
+      for (var i = 0; i < labelArr.length; i++) {
+        labelArr[i].classList.remove("active");
+      }
     },
     callback: function(data) {}
   }
