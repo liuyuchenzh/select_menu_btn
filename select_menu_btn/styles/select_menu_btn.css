@@ -42,3 +42,7 @@
   text-align: center;
   font-family: "Microsoft Yahei", Arial;
 }
+.yc-select-menu-item label.active {
+  background-color: #58a;
+  color: white;
+}

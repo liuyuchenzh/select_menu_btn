@@ -14,6 +14,7 @@ var selectMenuBtn = (function() {
     button: null,
     menu: null,
     radioArr: null,
+    labelArr: null,
     displayState: false,
     init: function(parent, data) {
       this.parent = parent || document.body;
@@ -40,6 +41,7 @@ var selectMenuBtn = (function() {
       }
       menu.innerHTML = html;
       this.radioArr = menu.querySelectorAll("input");
+      this.labelArr = menu.querySelectorAll("label");
 
       this.parent.appendChild(btn);
       this.parent.appendChild(menu);
@@ -49,6 +51,9 @@ var selectMenuBtn = (function() {
         this.button.addEventListener("click", this.btnClickHandler.bind(this), false);
         document.addEventListener("click", this.docClickHanlder.bind(this), false);
         this.menu.addEventListener("change", this.radioChangeHandler.bind(this), false);
+        for (var i = 0; i < this.labelArr.length; i++) {
+          this.labelArr[i].addEventListener("mouseenter", this.mouseEnterHandler.bind(this), false);
+        }
       } else if (document.attachEvent) {
         var self = this;
         this.button.attachEvent("onclick", function(e) {
@@ -60,6 +65,11 @@ var selectMenuBtn = (function() {
         this.menu.attachEvent("onchange", function(e) {
           self.radioChangeHandler.call(self, e);
         });
+        for (var i = 0; i < this.labelArr.length; i++) {
+          this.labelArr[i].attachEvent("onmouseenter", function(e) {
+            self.mouseEnterHandler.call(self, e);
+          });
+        }
       }
     },
     btnClickHandler: function(e) {
@@ -84,7 +94,7 @@ var selectMenuBtn = (function() {
       this.hideMenu();
     },
     radioChangeHandler: function(e) {
-      var e = e || window.event;
+      e = e || window.event;
       var target = e.target || e.srcElement;
       var radioArr = this.radioArr;
       for (var i = 0; i < radioArr.length; i++) {
@@ -97,9 +107,24 @@ var selectMenuBtn = (function() {
       this.button.textContent = text;
       // this.callback(target.value);
     },
+    mouseEnterHandler: function(e) {
+      e = e || window.event;
+      var target = e.target || e.srcElement;
+      target.classList.add("active");
+      var labelArr = this.labelArr;
+      for (var i = 0; i < labelArr.length; i++) {
+        if (labelArr[i] !== target) {
+          labelArr[i].classList.remove("active");
+        }
+      }
+    },
     hideMenu: function() {
       this.menu.style.cssText = "";
       this.displayState = false;
+      var labelArr = this.labelArr;
+      for (var i = 0; i < labelArr.length; i++) {
+        labelArr[i].classList.remove("active");
+      }
     },
     showMenu: function() {
       this.menu.style.cssText = "visibility: visible;";
